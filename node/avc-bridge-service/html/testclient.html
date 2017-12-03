@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>Test Websocket Client</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+</head>
+<div>
+	<p>Please open up your browser console to get informations...</p>
+</div>
+
+<body>
+	<script type="text/javascript">
+		// connect info
+		var username = 'demo';
+		var serverKey = 'please-change-me';
+		var userAccessToken = '9HWC4FTM8W39ITWIWQBBPENTL46MY072GMUAA8F7IL9SHMB25DWG5MMVM3Y2';
+		var apexSessionId = '111111111'
+		var connectString = 'username=' + username + '&serverKey=' + serverKey + '&userAccessToken=' + userAccessToken + '&apexSessionId=' + apexSessionId;
+		console.log(connectString);
+		// connect to socket
+		var avcSocket = io.connect('/avc', {
+			query: connectString
+		});
+		// socket message event
+		avcSocket.on('message', function(data) {
+			console.log('message data', data);
+		});
+		// socket disconnect event
+		avcSocket.on('disconnect', function() {
+			console.log('avcSocket disconnected');
+		});
+	</script>
+
+</body>
+
+</html>

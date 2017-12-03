@@ -1,0 +1,8 @@
+{
+  "messages": {
+    "connectionError": {
+      "en": "connection error with endpoint",
+      "de": "verbindungsfehler zum endpunkt"
+    }
+  }
+}

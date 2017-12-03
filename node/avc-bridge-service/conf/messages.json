@@ -1,0 +1,24 @@
+{
+  "messages": {
+    "clientIdNotMatch": {
+      "en": "client id does not match",
+      "de": "client id ist nicht korrekt"
+    },
+    "userNotFound": {
+      "en": "user not found or connected",
+      "de": "benutzer nicht gefunden oder verbunden"
+    },
+    "missingParameter": {
+      "en": "missig required parameter",
+      "de": "pflicht parameter fehlen"
+    },
+    "messageSent": {
+      "en": "message sent to user",
+      "de": "nachricht an benutzer gesendet"
+    },
+    "noPageActionFound": {
+      "en": "no matching page action found",
+      "de": "keine passende seiten aktion gefunden"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "server": {
+    "logLevel": "debug"
+  },
+  "RESTful": {
+    "baseUrl": "https://your-avc-bridge-service.com:8585",
+    "basicAuthUser": "REST",
+    "basicAuthPassword": "REST"
+  },
+  "amazon": {
+    "appId": "YOUR-SKILL-APP-ID",
+    "accountLinking": {
+      "clientId": "YOUR-SKILL-CLIENT-ID"
+    }
+  }
+}

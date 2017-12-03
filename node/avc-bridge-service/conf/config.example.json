@@ -1,0 +1,34 @@
+{
+  "server": {
+    "logLevel": "debug",
+    "httpListenAddress": "0.0.0.0",
+    "httpListenPort": "8585",
+    "httpSSLKeyPath": "",
+    "httpSSLCertPath": "",
+    "httpSSLCACertPath": "",
+    "basicAuthUser": "REST",
+    "basicAuthPassword": "REST",
+    "maxPostSize": 524288
+  },
+  "database": {
+    "user": "scott",
+    "password": "tiger",
+    "connectString": "localhost:1521/XE",
+    "authenticationProcedure": "avc_pkg.authenticate_user",
+    "validateTokenFunction": "avc_pkg.validate_token",
+    "apexAppId": 120
+  },
+  "websocket": {
+    "serverKey": "please-change-me"
+  },
+  "amazon": {
+    "accountLinking": {
+      "clientId": "alexa-avc-skill",
+      "redirectUrls": [
+        "https://layla.amazon.com/spa/skill/account-linking-status.html?vendorId=XXXXXXXXXX",
+        "https://pitangui.amazon.com/spa/skill/account-linking-status.html?vendorId=XXXXXXXXXX",
+        "https://alexa.amazon.co.jp/spa/skill/account-linking-status.html?vendorId=XXXXXXXXXX"
+      ]
+    }
+  }
+}

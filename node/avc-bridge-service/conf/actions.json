@@ -1,0 +1,24 @@
+{
+  "pages": [{
+    "pageName": {
+      "en": ["employee", "employees"],
+      "de": ["mitarbeiter"]
+    },
+    "searchParam": "RP,CIR:IR[CUSTOMER]C_ENAME:",
+    "pageId": 1
+  }, {
+    "pageName": {
+      "en": ["customer", "customers"],
+      "de": ["kunde", "kunden"]
+    },
+    "searchParam": "RP,CIR:IR[CUSTOMER]C_CUSTOMER_NAME:",
+    "pageId": 2
+  }, {
+    "pageName": {
+      "en": ["product", "products"],
+      "de": ["produkt", "produkte"]
+    },
+    "searchParam": "RP,CIR:IR[PRODUCT]_ROWFILTER:",
+    "pageId": 3
+  }]
+}

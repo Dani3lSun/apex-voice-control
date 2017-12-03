@@ -1,0 +1,113 @@
+{
+  "languageModel": {
+    "types": [{
+      "name": "LIST_OF_PAGES",
+      "values": [{
+          "id": null,
+          "name": {
+            "value": "mitarbeiter",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "kunde",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "kunden",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "produkt",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "produkte",
+            "synonyms": []
+          }
+        }
+      ]
+    }],
+    "intents": [{
+        "name": "AMAZON.CancelIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.HelpIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.RepeatIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.StopIntent",
+        "samples": []
+      },
+      {
+        "name": "NavigatePageIntent",
+        "samples": [
+          "öffne seite {Page}",
+          "öffne {Page} seite",
+          "öffne die {Page} seite",
+          "öffne die seite {Page}",
+          "gehe zur seite {Page}",
+          "gehe zur {Page} seite",
+          "navigiere zur seite {Page}",
+          "navigiere zur {Page} seite",
+          "navigiere zu der {Page} seite"
+        ],
+        "slots": [{
+          "name": "Page",
+          "type": "LIST_OF_PAGES"
+        }]
+      },
+      {
+        "name": "NavigatePageSearchIntent",
+        "samples": [
+          "öffne seite {Page} und suche {Search}",
+          "öffne {Page} seite und suche {Search}",
+          "öffne die {Page} seite und suche nach {Search}",
+          "öffne die seite {Page} und suche nach {Search}",
+          "gehe zur seite {Page} und suche nach {Search}",
+          "gehe zur {Page} seite und suche nach {Search}",
+          "navigiere zur seite {Page} und suche {Search}",
+          "navigiere zur {Page} seite und suche {Search}",
+          "navigiere zu der {Page} seite und suche {Search}",
+          "navigiere zur seite {Page} und suche nach {Search}",
+          "navigiere zur {Page} seite und suche nach {Search}",
+          "navigiere zu der {Page} seite und suche nach {Search}"
+        ],
+        "slots": [{
+          "name": "Page",
+          "type": "LIST_OF_PAGES"
+        }, {
+          "name": "Search",
+          "type": "AMAZON.DE_FIRST_NAME"
+        }]
+      },
+      {
+        "name": "PartyModeIntent",
+        "samples": [
+          "mach party",
+          "lass die party beginnen",
+          "lass die fete steigen",
+          "lass krachen"
+        ],
+        "slots": []
+      }
+    ],
+    "invocationName": "apex"
+  }
+}

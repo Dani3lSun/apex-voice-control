@@ -1,0 +1,68 @@
+{
+  "userSessions": [
+    {
+      "username": "0",
+      "userAccessToken": "0",
+      "apexSessionId": "0",
+      "createDate": 4667722569632
+    },
+    {
+      "username": "demo",
+      "userAccessToken": "9HWC4FTM8W39ITWIWQBBPENTL46MY072GMUAA8F7IL9SHMB25DWG5MMVM3Y2",
+      "apexSessionId": "111111111",
+      "createDate": 1512049714930
+    }
+  ],
+  "socketSessions": [
+    {
+      "username": "0",
+      "socketSessionId": "0",
+      "createDate": 4667722569632
+    },
+    {
+      "username": "demo",
+      "socketSessionId": "/avc#Ip-9UnWpbfsJaWzzAAAA",
+      "createDate": 1512049029363
+    },
+    {
+      "username": "demo",
+      "socketSessionId": "/avc#If4Qb7AoOq7CM0_2AAAB",
+      "createDate": 1512049150376
+    },
+    {
+      "username": "demo",
+      "socketSessionId": "/avc#HLg0UMkPt1jbkFgqAAAC",
+      "createDate": 1512049175836
+    },
+    {
+      "username": "demo",
+      "socketSessionId": "/avc#sOFQ2207ar5aKTcZAAAA",
+      "createDate": 1512049673308
+    },
+    {
+      "username": "demo",
+      "socketSessionId": "/avc#847rNcFA0nnZ8yMCAAAA",
+      "createDate": 1512049714932
+    },
+    {
+      "username": "demo",
+      "socketSessionId": "/avc#efu8OtbI4p6Q1GkeAAAB",
+      "createDate": 1512049805247
+    },
+    {
+      "username": "demo",
+      "socketSessionId": "/avc#CsQNWvzSGpXXzA9UAAAC",
+      "createDate": 1512049978686
+    },
+    {
+      "username": "demo",
+      "socketSessionId": "/avc#nndBk8sgrTrJJKSnAAAA",
+      "createDate": 1512052279683
+    },
+    {
+      "username": "demo",
+      "socketSessionId": "/avc#_LNkuDoUQ4Hxy0YYAAAA",
+      "createDate": 1512055424398
+    }
+  ]
+}

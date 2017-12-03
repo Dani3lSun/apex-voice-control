@@ -1,0 +1,31 @@
+{
+  "name": "avc-alexa-service",
+  "version": "1.0.0",
+  "description": "APEX Voice Control Alexa Service, handling voice commands",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dani3lSun/apex-voice-control.git"
+  },
+  "keywords": [
+    "apex",
+    "alexa",
+    "voice",
+    "control",
+    "oracle"
+  ],
+  "author": "Daniel Hochleitner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Dani3lSun/apex-voice-control/issues"
+  },
+  "homepage": "https://github.com/Dani3lSun/apex-voice-control#readme",
+  "dependencies": {
+    "alexa-sdk": "^1.0.21",
+    "aws-sdk": "^2.161.0",
+    "request": "^2.83.0"
+  }
+}
