@@ -14,6 +14,7 @@ const http = require('http');
 const https = require('https');
 const url = require('url');
 const fs = require('fs');
+const Bottleneck = require("bottleneck");
 
 /**
  * Server helper functions
@@ -22,31 +23,34 @@ var srvHelper = {
   /**
    * Path Routing
    * @param {string} pPath
+   * @param {string} pMethod
    * @param {object} req
    * @param {object} res
    */
-  pathRouting: function(pPath, req, res) {
+  pathRouting: function(pPath, pMethod, req, res) {
+    // rate limiter
+    var limiter = new Bottleneck(appConfig.rateLimitMaxConcurrent, appConfig.rateLimitMinTime);
     // Path Routing
-    if (pPath == '/login') {
+    if (pPath == '/login' && pMethod == 'GET') {
       restapi.loginPage(res);
-    } else if (pPath == '/error') {
+    } else if (pPath == '/error' && pMethod == 'GET') {
       restapi.errorPage(res);
-    } else if (pPath == '/testclient') {
+    } else if (pPath == '/testclient' && pMethod == 'GET') {
       restapi.testclientPage(req, res);
-    } else if (pPath == '/js/login.js') {
+    } else if (pPath == '/js/login.js' && pMethod == 'GET') {
       restapi.getJSFile('/html/js/login.js', res);
-    } else if (pPath == '/js/error.js') {
+    } else if (pPath == '/js/error.js' && pMethod == 'GET') {
       restapi.getJSFile('/html/js/error.js', res);
-    } else if (pPath == '/css/style.css') {
+    } else if (pPath == '/css/style.css' && pMethod == 'GET') {
       restapi.getCSSFile('/html/css/style.css', res);
-    } else if (pPath == '/api/autenticateUser') {
-      restapi.authenticateUser(req, res);
-    } else if (pPath == '/api/navigateToApexPage') {
-      restapi.navigateToApexPage(req, res);
-    } else if (pPath == '/api/navigateToApexPageAndSearch') {
-      restapi.navigateToApexPageAndSearch(req, res);
-    } else if (pPath == '/api/partyMode') {
-      restapi.partyMode(req, res);
+    } else if (pPath == '/api/autenticateUser' && pMethod == 'POST') {
+      limiter.submit(restapi.authenticateUser, req, res, null);
+    } else if (pPath == '/api/navigateToApexPage' && pMethod == 'POST') {
+      limiter.submit(restapi.navigateToApexPage, req, res, null);
+    } else if (pPath == '/api/navigateToApexPageAndSearch' && pMethod == 'POST') {
+      limiter.submit(restapi.navigateToApexPageAndSearch, req, res, null);
+    } else if (pPath == '/api/partyMode' && pMethod == 'POST') {
+      limiter.submit(restapi.partyMode, req, res, null);
     } else {
       restapi.throwHttpError(404, 'Not Found', res);
     }
@@ -77,22 +81,26 @@ if ((appConfig.server.httpSSLKeyPath) && (appConfig.server.httpSSLCertPath)) {
   server = https.createServer(sslOptions, function(req, res) {
     var parsedUrl = url.parse(req.url, true);
     var path = parsedUrl.pathname;
+    var method = req.method;
     // debug
     logger.debug('HTTPS Server: req.headers', req.headers);
+    logger.debug('HTTPS Server: req.method', req.method);
     logger.debug('HTTPS Server: parsedUrl', parsedUrl);
     // Path Routing
-    srvHelper.pathRouting(path, req, res);
+    srvHelper.pathRouting(path, method, req, res);
   });
   // Plain HTTP
 } else {
   server = http.createServer(function(req, res) {
     var parsedUrl = url.parse(req.url, true);
     var path = parsedUrl.pathname;
+    var method = req.method;
     // debug
     logger.debug('HTTP Server: req.headers', req.headers);
+    logger.debug('HTTPS Server: req.method', req.method);
     logger.debug('HTTP Server: parsedUrl', parsedUrl);
     // Path Routing
-    srvHelper.pathRouting(path, req, res);
+    srvHelper.pathRouting(path, method, req, res);
   });
 }
 server.listen(appConfig.server.httpListenPort, appConfig.server.httpListenAddress);

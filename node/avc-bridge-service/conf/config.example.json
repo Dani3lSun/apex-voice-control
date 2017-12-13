@@ -8,7 +8,9 @@
     "httpSSLCACertPath": "",
     "basicAuthUser": "REST",
     "basicAuthPassword": "REST",
-    "maxPostSize": 524288
+    "maxPostSize": 524288,
+    "rateLimitMaxConcurrent": 1,
+    "rateLimitMinTime": 2000
   },
   "database": {
     "user": "scott",

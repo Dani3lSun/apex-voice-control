@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/Dani3lSun/apex-voice-control#readme",
   "dependencies": {
+    "bottleneck": "^1.16.0",
     "fs": "0.0.1-security",
     "http": "0.0.0",
     "https": "^1.0.0",
