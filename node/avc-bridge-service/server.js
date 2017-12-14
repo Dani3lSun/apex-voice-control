@@ -14,7 +14,6 @@ const http = require('http');
 const https = require('https');
 const url = require('url');
 const fs = require('fs');
-const Bottleneck = require("bottleneck");
 
 /**
  * Server helper functions
@@ -28,31 +27,45 @@ var srvHelper = {
    * @param {object} res
    */
   pathRouting: function(pPath, pMethod, req, res) {
-    // rate limiter
-    var limiter = new Bottleneck(appConfig.rateLimitMaxConcurrent, appConfig.rateLimitMinTime);
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     // Path Routing
-    if (pPath == '/login' && pMethod == 'GET') {
-      restapi.loginPage(res);
-    } else if (pPath == '/error' && pMethod == 'GET') {
-      restapi.errorPage(res);
-    } else if (pPath == '/testclient' && pMethod == 'GET') {
-      restapi.testclientPage(req, res);
-    } else if (pPath == '/js/login.js' && pMethod == 'GET') {
-      restapi.getJSFile('/html/js/login.js', res);
-    } else if (pPath == '/js/error.js' && pMethod == 'GET') {
-      restapi.getJSFile('/html/js/error.js', res);
-    } else if (pPath == '/css/style.css' && pMethod == 'GET') {
-      restapi.getCSSFile('/html/css/style.css', res);
-    } else if (pPath == '/api/autenticateUser' && pMethod == 'POST') {
-      limiter.submit(restapi.authenticateUser, req, res, null);
-    } else if (pPath == '/api/navigateToApexPage' && pMethod == 'POST') {
-      limiter.submit(restapi.navigateToApexPage, req, res, null);
-    } else if (pPath == '/api/navigateToApexPageAndSearch' && pMethod == 'POST') {
-      limiter.submit(restapi.navigateToApexPageAndSearch, req, res, null);
-    } else if (pPath == '/api/partyMode' && pMethod == 'POST') {
-      limiter.submit(restapi.partyMode, req, res, null);
+    if (pMethod == 'GET') {
+      if (pPath == '/login') {
+        restapi.loginPage(res);
+      } else if (pPath == '/error') {
+        restapi.errorPage(res);
+      } else if (pPath == '/testclient') {
+        restapi.testclientPage(req, res);
+      } else if (pPath == '/js/login.js') {
+        restapi.getJSFile('/html/js/login.js', res);
+      } else if (pPath == '/js/error.js') {
+        restapi.getJSFile('/html/js/error.js', res);
+      } else if (pPath == '/css/style.css') {
+        restapi.getCSSFile('/html/css/style.css', res);
+      } else {
+        restapi.throwHttpError(404, 'Not Found', res);
+      }
+    } else if (pMethod == 'POST') {
+      // rate limit --> log ip/date
+      lowdb.addApiRequest(ip);
+      // check rate limit --> exceed max allowed Connections per Interval
+      if (lowdb.apiRequestsExceeded(ip)) {
+        restapi.throwHttpError(429, 'Too Many Requests', res);
+      } else {
+        if (pPath == '/api/autenticateUser') {
+          restapi.authenticateUser(req, res);
+        } else if (pPath == '/api/navigateToApexPage') {
+          restapi.navigateToApexPage(req, res);
+        } else if (pPath == '/api/navigateToApexPageAndSearch') {
+          restapi.navigateToApexPageAndSearch(req, res);
+        } else if (pPath == '/api/partyMode') {
+          restapi.partyMode(req, res);
+        } else {
+          restapi.throwHttpError(404, 'Not Found', res);
+        }
+      }
     } else {
-      restapi.throwHttpError(404, 'Not Found', res);
+      restapi.throwHttpError(404, 'HTTP Method not allowed', res);
     }
   }
 };

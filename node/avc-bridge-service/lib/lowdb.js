@@ -2,6 +2,7 @@
  * Purpose: Local JSON database for storing user / websocket sessions
  * Author:  Daniel Hochleitner
  */
+const appConfig = require(appRootFolder + '/conf/config.json');
 const logger = require(appRootFolder + '/lib/logger.js').getLogger('lowdb');
 const utils = require(appRootFolder + '/lib/utils.js');
 const low = require('lowdb');
@@ -22,6 +23,10 @@ db.defaults({
     username: '0',
     socketSessionId: '0',
     createDate: utils.getFutureDate() // future date so cleanup job doesn´t remove it
+  }],
+  apiRequests: [{
+    requestIP: '0',
+    requestDate: utils.getFutureDate() // future date so cleanup job doesn´t remove it
   }]
 }).write();
 
@@ -69,6 +74,25 @@ module.exports = {
         .write();
     } catch (err) {
       logger.error('addSocketSession: err', err);
+    }
+  },
+  /**
+   * Add an API request to DB
+   * @param {string} pIP
+   */
+  addApiRequest: function(pIP) {
+    try {
+      var newApiRequest = {
+        requestIP: pIP,
+        requestDate: Date.now()
+      };
+      logger.debug('addApiRequest: newApiRequest', newApiRequest);
+
+      db.get('apiRequests')
+        .push(newApiRequest)
+        .write();
+    } catch (err) {
+      logger.error('addApiRequest: err', err);
     }
   },
   /**
@@ -179,6 +203,32 @@ module.exports = {
     } catch (err) {
       logger.error('getSessionsForUser: err', err);
       return;
+    }
+  },
+  /**
+   * Check if API requests exceed max allowed Connections per Interval
+   * @param {string} pIP
+   * @return {boolean}
+   */
+  apiRequestsExceeded: function(pIP) {
+    try {
+      var now = new Date();
+      var limitDate = now.setMilliseconds(now.getMilliseconds() - appConfig.server.rateLimitInterval);
+
+      var apiRequests = db.get('apiRequests')
+        .filter(function(o) {
+          return o.requestIP == pIP && o.requestDate > limitDate;
+        })
+        .value();
+
+      if (apiRequests.length > appConfig.server.rateLimitConnections) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      logger.error('apiRequestsExceeded: err', err);
+      return false;
     }
   }
 };

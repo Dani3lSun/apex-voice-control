@@ -4,14 +4,20 @@
       "username": "0",
       "userAccessToken": "0",
       "apexSessionId": "0",
-      "createDate": 4667750880954
+      "createDate": 4668918290025
     }
   ],
   "socketSessions": [
     {
       "username": "0",
       "socketSessionId": "0",
-      "createDate": 4667750880954
+      "createDate": 4668918290025
+    }
+  ],
+  "apiRequests": [
+    {
+      "requestIP": "0",
+      "requestDate": 4668918290025
     }
   ]
 }

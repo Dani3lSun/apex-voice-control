@@ -9,8 +9,8 @@
     "basicAuthUser": "REST",
     "basicAuthPassword": "REST",
     "maxPostSize": 524288,
-    "rateLimitMaxConcurrent": 1,
-    "rateLimitMinTime": 2000
+    "rateLimitConnections": 1,
+    "rateLimitInterval": 1500
   },
   "database": {
     "user": "scott",
