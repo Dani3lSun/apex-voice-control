@@ -149,6 +149,25 @@ module.exports = {
     }, 3600000);
   },
   /**
+   * Remove API requests older than 2 hours (runs every 1 hour)
+   */
+  removeOldApiRequests: function() {
+    setInterval(function() {
+      try {
+        var now = new Date();
+        db.get('apiRequests')
+          .remove(function(o) {
+            var pastDate = now.setHours(now.getHours() - 2);
+            return o.requestDate < pastDate;
+          })
+          .write();
+        logger.info('removeOldApiRequests: old API requests deleted');
+      } catch (err) {
+        logger.error('removeOldApiRequests: err', err);
+      }
+    }, 3600000);
+  },
+  /**
    * Get username from given user access token
    * @param {string} pUserAccessToken
    * @return {string} username

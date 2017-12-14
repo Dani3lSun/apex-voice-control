@@ -131,6 +131,7 @@ global.appWebsocket = websocket;
  */
 lowdb.removeOldUserSessions();
 lowdb.removeOldSocketSessions();
+lowdb.removeOldApiRequests();
 
 /**
  * Info logging for started HTTP server
