@@ -50,6 +50,7 @@ var srvHelper = {
       lowdb.addApiRequest(ip);
       // check rate limit --> exceed max allowed Connections per Interval
       if (lowdb.apiRequestsExceeded(ip)) {
+        logger.debug('pathRouting: POST - Too Many Requests', ip);
         restapi.throwHttpError(429, 'Too Many Requests', res);
       } else {
         if (pPath == '/api/autenticateUser') {

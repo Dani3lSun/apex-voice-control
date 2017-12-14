@@ -91,6 +91,47 @@ CREATE OR REPLACE PACKAGE BODY avc_pkg IS
   END create_apex_session;
   --
   /****************************************************************************
+  * Purpose:  Joins an existing APEX session
+  *           https://github.com/OraOpenSource/oos-utils/blob/master/source/packages/oos_util_apex.pkb
+  * Author:   Daniel Hochleitner
+  * Created:  14.12.2017
+  * Changed:
+  ****************************************************************************/
+  PROCEDURE join_apex_session(p_session_id IN apex_workspace_sessions.apex_session_id%TYPE,
+                              p_app_id     IN apex_applications.application_id%TYPE DEFAULT NULL) AS
+    l_app_id    apex_applications.application_id%TYPE := p_app_id;
+    l_user_name apex_workspace_sessions.user_name%TYPE;
+  
+  BEGIN
+  
+    IF l_app_id IS NULL THEN
+      SELECT MAX(application_id)
+        INTO l_app_id
+        FROM (SELECT application_id,
+                     row_number() over(ORDER BY view_date DESC) rn
+                FROM apex_workspace_activity_log
+               WHERE apex_session_id = p_session_id)
+       WHERE rn = 1;
+    END IF;
+  
+    IF l_app_id IS NULL THEN
+      raise_application_error(-20010,
+                              'Can not find matching app_id for session: ' ||
+                              p_session_id);
+    END IF;
+  
+    SELECT user_name
+      INTO l_user_name
+      FROM apex_workspace_sessions
+     WHERE apex_session_id = p_session_id;
+  
+    avc_pkg.create_apex_session(p_app_id     => l_app_id,
+                                p_user_name  => l_user_name,
+                                p_session_id => p_session_id);
+  
+  END join_apex_session;
+  --
+  /****************************************************************************
   * Purpose:  Execute APEX login and return authentication result
   * Author:   Daniel Hochleitner
   * Created:  29.11.2017
@@ -115,6 +156,32 @@ CREATE OR REPLACE PACKAGE BODY avc_pkg IS
     RETURN l_bool;
     --
   END apex_login;
+  --
+  /****************************************************************************
+  * Purpose:  Get an SSP URL of an APEX page
+  * Author:   Daniel Hochleitner
+  * Created:  14.12.2017
+  * Changed:
+  ****************************************************************************/
+  FUNCTION prepare_url(p_url        IN VARCHAR2,
+                       p_app_id     IN NUMBER,
+                       p_session_id IN NUMBER) RETURN VARCHAR2 AS
+    --
+    l_url VARCHAR2(2000);
+    --
+  BEGIN
+    -- joins APEX session inside of PL/SQL
+    avc_pkg.join_apex_session(p_session_id => p_session_id,
+                              p_app_id     => p_app_id);
+    -- call prepare_url
+    l_url := apex_util.prepare_url(p_url => p_url);
+    --
+    RETURN l_url;
+    --
+  EXCEPTION
+    WHEN OTHERS THEN
+      RETURN p_url;
+  END prepare_url;
   --
   /****************************************************************************
   * Purpose:  Generates a new token (random string)

@@ -10,7 +10,7 @@
     "basicAuthPassword": "REST",
     "maxPostSize": 524288,
     "rateLimitConnections": 1,
-    "rateLimitInterval": 1500
+    "rateLimitInterval": 250
   },
   "database": {
     "user": "scott",

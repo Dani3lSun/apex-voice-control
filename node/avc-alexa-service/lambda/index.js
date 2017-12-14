@@ -44,7 +44,7 @@ const languageStrings = {
 };
 
 const handlers = {
-  //Use LaunchRequest, instead of NewSession if you want to use the one-shot model
+  // Use LaunchRequest, instead of NewSession if you want to use the one-shot model
   // Alexa, ask [my-skill-invocation-name] to (do something)...
   'LaunchRequest': function() {
     this.attributes.speechOutput = this.t('WELCOME_MESSAGE', this.t('SKILL_NAME'));
@@ -71,9 +71,10 @@ const handlers = {
       //if (responseData.success) {
       var message = responseData.message || '';
       var speechOutput = me.attributes.speechOutput = message;
-      var repromptSpeech = me.attributes.repromptSpeech = me.t('REPEAT_MESSAGE');
+      //var repromptSpeech = me.attributes.repromptSpeech = me.t('REPEAT_MESSAGE');
 
-      me.response.speak(speechOutput).listen(repromptSpeech);
+      //me.response.speak(speechOutput).listen(repromptSpeech);
+      me.response.speak(speechOutput);
       me.response.cardRenderer(cardTitle, pageName);
       me.emit(':responseReady');
       //}
@@ -100,9 +101,10 @@ const handlers = {
       //if (responseData.success) {
       var message = responseData.message || '';
       var speechOutput = me.attributes.speechOutput = message;
-      var repromptSpeech = me.attributes.repromptSpeech = me.t('REPEAT_MESSAGE');
+      //var repromptSpeech = me.attributes.repromptSpeech = me.t('REPEAT_MESSAGE');
 
-      me.response.speak(speechOutput).listen(repromptSpeech);
+      //me.response.speak(speechOutput).listen(repromptSpeech);
+      me.response.speak(speechOutput);
       me.response.cardRenderer(cardTitle, pageName);
       me.emit(':responseReady');
       //}
@@ -119,9 +121,10 @@ const handlers = {
       //if (responseData.success) {
       var message = responseData.message || '';
       var speechOutput = me.attributes.speechOutput = message;
-      var repromptSpeech = me.attributes.repromptSpeech = me.t('REPEAT_MESSAGE');
+      //var repromptSpeech = me.attributes.repromptSpeech = me.t('REPEAT_MESSAGE');
 
-      me.response.speak(speechOutput).listen(repromptSpeech);
+      //me.response.speak(speechOutput).listen(repromptSpeech);
+      me.response.speak(speechOutput);
       me.response.cardRenderer(cardTitle, 'PARTY!!');
       me.emit(':responseReady');
       //}
@@ -140,12 +143,13 @@ const handlers = {
   },
   'AMAZON.StopIntent': function() {
     this.attributes.speechOutput = this.t('STOP_MESSAGE');
-
     this.response.speak(this.attributes.speechOutput);
-    this.emit('SessionEndedRequest');
+    this.emit(':responseReady');
   },
   'AMAZON.CancelIntent': function() {
-    this.emit('SessionEndedRequest');
+    this.attributes.speechOutput = this.t('STOP_MESSAGE');
+    this.response.speak(this.attributes.speechOutput);
+    this.emit(':responseReady');
   },
   'SessionEndedRequest': function() {
     console.log(`Session ended: ${this.event.request.reason}`);
