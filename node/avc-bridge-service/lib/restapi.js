@@ -506,7 +506,118 @@ module.exports = {
               return;
             }
           } else {
-            logger.debug('navigateToApexPageAndSearch: missig required parameter - pageName & userAccessToken');
+            logger.debug('navigateToApexPageAndSearch: missig required parameter - pageName & searchValue & userAccessToken');
+            // response error json
+            module.exports.responseJson({
+              "success": false,
+              "message": appMessages.messages.missingParameter[lang]
+            }, res);
+            return;
+          }
+        }
+      });
+    }
+  },
+  /**
+   * Search on current APEX page REST service
+   * @param {object} req
+   * @param {object} res
+   */
+  searchOnCurrentApexPage: function(req, res) {
+    // basic auth
+    if (module.exports.basicAuth(req, res)) {
+      var body = [];
+
+      req.on('error', function(err) {
+        logger.error('searchOnCurrentApexPage: req.error', err);
+      }).on('data', function(chunk) {
+        body.push(chunk);
+        // max. allowed post size - default: 524288 ~ 500kb
+        if (Buffer.concat(body).toString().length > appConfig.server.maxPostSize) {
+          logger.error('searchOnCurrentApexPage: body.length too big (' + appConfig.server.maxPostSize / 1024 + 'kb)');
+          res.writeHead(413, {
+            'Content-Type': 'text/plain'
+          });
+          req.connection.destroy();
+          return;
+        }
+      }).on('end', function() {
+        body = Buffer.concat(body).toString();
+        // max. allowed post size - default: 524288 ~ 500kb
+        if (body.length > appConfig.server.maxPostSize) {
+          logger.error('searchOnCurrentApexPage: body.length too big (' + appConfig.server.maxPostSize / 1024 + 'kb)');
+          return;
+        }
+        // debug
+        logger.debug('searchOnCurrentApexPage: body', body);
+
+        try {
+          var parsedBody = JSON.parse(body);
+        } catch (err) {
+          logger.error('searchOnCurrentApexPage: JSON parse error', err);
+          res.end();
+        }
+
+        if (parsedBody) {
+          // debug
+          logger.debug('navigateToApexPageAndSearch: parsedBody', parsedBody);
+
+          var lang = utils.getMainLanguage(parsedBody.lang);
+          var clientId = parsedBody.clientId;
+          var searchValue = parsedBody.searchValue;
+          var userAccessToken = parsedBody.userAccessToken;
+
+          // check for correct amazon client_id
+          if (clientId !== appConfig.amazon.accountLinking.clientId) {
+            logger.debug('searchOnCurrentApexPage: client_id does not match');
+            // response error json
+            module.exports.responseJson({
+              "success": false,
+              "message": appMessages.messages.clientIdNotMatch[lang]
+            }, res);
+            return;
+          }
+          // check required params
+          if (searchValue && userAccessToken) {
+            var username = lowdb.getUserFromToken(userAccessToken);
+            // only process if user is found
+            if (username) {
+              // get action pages array
+              var actionPages = utils.getActionPages();
+              // only process if page action is found
+              if (actionPages) {
+                // send websocket message
+                appWebsocket.sendMessage(username, {
+                  "type": "CURRENT_PAGE_SEARCH",
+                  "searchValue": searchValue,
+                  "pages": actionPages
+                });
+                // response success json
+                module.exports.responseJson({
+                  "success": true,
+                  "message": appMessages.messages.messageSent[lang]
+                }, res);
+              } else {
+                logger.debug('searchOnCurrentApexPage: no action pages found');
+                // response error json
+                module.exports.responseJson({
+                  "success": false,
+                  "message": appMessages.messages.noPageActionFound[lang]
+                }, res);
+                return;
+              }
+
+            } else {
+              logger.debug('searchOnCurrentApexPage: username not found');
+              // response error json
+              module.exports.responseJson({
+                "success": false,
+                "message": appMessages.messages.userNotFound[lang]
+              }, res);
+              return;
+            }
+          } else {
+            logger.debug('searchOnCurrentApexPage: missig required parameter - searchValue & userAccessToken');
             // response error json
             module.exports.responseJson({
               "success": false,
@@ -601,7 +712,7 @@ module.exports = {
               return;
             }
           } else {
-            logger.debug('partyMode: missig required parameter - pageName & userAccessToken');
+            logger.debug('partyMode: missig required parameter - userAccessToken');
             // response error json
             module.exports.responseJson({
               "success": false,

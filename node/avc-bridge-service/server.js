@@ -59,6 +59,8 @@ var srvHelper = {
           restapi.navigateToApexPage(req, res);
         } else if (pPath == '/api/navigateToApexPageAndSearch') {
           restapi.navigateToApexPageAndSearch(req, res);
+        } else if (pPath == '/api/searchOnCurrentApexPage') {
+          restapi.searchOnCurrentApexPage(req, res);
         } else if (pPath == '/api/partyMode') {
           restapi.partyMode(req, res);
         } else {

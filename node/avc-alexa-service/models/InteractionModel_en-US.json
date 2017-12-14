@@ -89,9 +89,24 @@
           "search for {Page} {Search}"
         ],
         "slots": [{
-          "name": "Page",
-          "type": "LIST_OF_PAGES"
-        }, {
+            "name": "Page",
+            "type": "LIST_OF_PAGES"
+          },
+          {
+            "name": "Search",
+            "type": "AMAZON.US_FIRST_NAME"
+          }
+        ]
+      },
+      {
+        "name": "SearchCurrentPageIntent",
+        "samples": [
+          "search on current page for {Search}",
+          "search on this page for {Search}",
+          "search for {Search} on current page",
+          "search for {Search} on this page"
+        ],
+        "slots": [{
           "name": "Search",
           "type": "AMAZON.US_FIRST_NAME"
         }]

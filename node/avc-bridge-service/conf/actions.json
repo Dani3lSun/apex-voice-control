@@ -5,6 +5,7 @@
       "de": ["mitarbeiter"]
     },
     "searchParam": "RP,CIR:IR[CUSTOMER]C_ENAME:",
+    "searchField": "EMPLOYEE_search_field",
     "pageId": 1
   }, {
     "pageName": {
@@ -12,6 +13,7 @@
       "de": ["kunde", "kunden"]
     },
     "searchParam": "RP,CIR:IR[CUSTOMER]C_CUSTOMER_NAME:",
+    "searchField": "CUSTOMER_search_field",
     "pageId": 2
   }, {
     "pageName": {
@@ -19,6 +21,7 @@
       "de": ["produkt", "produkte"]
     },
     "searchParam": "RP,CIR:IR[PRODUCT]_ROWFILTER:",
+    "searchField": "PRODUCT_search_field",
     "pageId": 3
   }]
 }

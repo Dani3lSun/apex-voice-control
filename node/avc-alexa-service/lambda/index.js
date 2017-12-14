@@ -110,6 +110,31 @@ const handlers = {
       //}
     });
   },
+  'SearchCurrentPageIntent': function() {
+    var me = this;
+    const searchSlot = me.event.request.intent.slots.Search;
+    const lang = me.event.request.locale;
+    const userAccessToken = me.event.session.user.accessToken || me.event.context.user.accessToken;
+    let searchValue;
+    if (searchSlot && searchSlot.value) {
+      searchValue = searchSlot.value.toLowerCase();
+    }
+
+    const cardTitle = me.t('DISPLAY_CARD_TITLE', me.t('SKILL_NAME'), searchValue);
+
+    rest.searchOnCurrentApexPage(searchValue, userAccessToken, lang, function(responseData) {
+      //if (responseData.success) {
+      var message = responseData.message || '';
+      var speechOutput = me.attributes.speechOutput = message;
+      //var repromptSpeech = me.attributes.repromptSpeech = me.t('REPEAT_MESSAGE');
+
+      //me.response.speak(speechOutput).listen(repromptSpeech);
+      me.response.speak(speechOutput);
+      me.response.cardRenderer(cardTitle, searchValue);
+      me.emit(':responseReady');
+      //}
+    });
+  },
   'PartyModeIntent': function() {
     var me = this;
     const lang = me.event.request.locale;

@@ -25,6 +25,13 @@ module.exports = {
     }
   },
   /**
+   * Get complete Action Pages Array
+   * @return {array}
+   */
+  getActionPages() {
+    return appActions.pages;
+  },
+  /**
    * Get an date number from some future date (default + 100 years)
    * @param {number} pAddYears
    * @return {number}

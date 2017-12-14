@@ -109,6 +109,39 @@ module.exports = {
     });
   },
   /**
+   * Make a HTTP POST to /api/searchOnCurrentApexPage endpoint
+   * @param {string} pSearchValue
+   * @param {string} pUserAccessToken
+   * @param {string} pLang
+   * @param {function} callback
+   */
+  searchOnCurrentApexPage: function(pSearchValue, pUserAccessToken, pLang, callback) {
+    var lang = module.exports.getMainLanguage(pLang);
+    var data = {
+      "clientId": appConfig.amazon.accountLinking.clientId,
+      "lang": lang,
+      "searchValue": pSearchValue.toLowerCase(),
+      "userAccessToken": pUserAccessToken
+    };
+
+    module.exports.makePostRequest('/api/searchOnCurrentApexPage', data, function(error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var responseData = {};
+        try {
+          responseData = JSON.parse(body);
+        } catch (err) {
+          console.log(err);
+        }
+        callback(responseData);
+      } else {
+        callback({
+          "success": false,
+          "message": appMessages.messages.connectionError[lang]
+        });
+      }
+    });
+  },
+  /**
    * Make a HTTP POST to /api/partyMode endpoint
    * @param {string} pUserAccessToken
    * @param {string} pLang

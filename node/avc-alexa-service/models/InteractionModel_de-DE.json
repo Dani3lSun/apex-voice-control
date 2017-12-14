@@ -98,6 +98,23 @@
         }]
       },
       {
+        "name": "SearchCurrentPageIntent",
+        "samples": [
+          "suche auf aktueller seite nach {Search}",
+          "suche auf der aktuellen seite nach {Search}",
+          "suche auf dieser seite nach {Search}",
+          "suche auf der seite nach {Search}",
+          "suche nach {Search} auf aktueller seite",
+          "suche nach {Search} auf der aktuellen seite",
+          "suche nach {Search} auf dieser seite",
+          "suche nach {Search} auf der seite"
+        ],
+        "slots": [{
+          "name": "Search",
+          "type": "AMAZON.DE_FIRST_NAME"
+        }]
+      },
+      {
         "name": "PartyModeIntent",
         "samples": [
           "mach party",
