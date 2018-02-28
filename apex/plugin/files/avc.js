@@ -1,22 +1,54 @@
 var avc = {
-  handleWebsocket: function(pUser) {
-    var username = pUser.toLowerCase();
-    var serverKey = $v('P0_SERVER_KEY');
-    var userAccessToken = $v('P0_USER_ACCESS_TOKEN');
+  /**
+   * Global Variables
+   */
+  gAvcSocket: null,
+  gAjaxIdentifier: null,
+  /**
+   * Connect to websocket of AVC-Bridge-Service
+   * @param {string} pBaseUrl
+   * @param {string} pServerKey
+   * @param {string} pUsername
+   * @param {string} pUserAccessToken
+   */
+  connectWebsocket: function(pBaseUrl, pServerKey, pUsername, pUserAccessToken) {
     var apexSessionId = $v('pInstance');
-    var connectString = 'username=' + username + '&serverKey=' + serverKey + '&userAccessToken=' + userAccessToken + '&apexSessionId=' + apexSessionId;
-    console.log(connectString);
+    var connectString = 'username=' + pUsername.toLowerCase() + '&serverKey=' + pServerKey + '&userAccessToken=' + pUserAccessToken + '&apexSessionId=' + apexSessionId;
+
+    // logging
+    apex.debug.log('avc.connectWebsocket - connectString', connectString);
+
     // connect to socket
-    var avcSocket = io.connect('https://orclapex.io:8585/avc', {
+    avc.gAvcSocket = io.connect(pBaseUrl + '/avc', {
       query: connectString
     });
+  },
+  /**
+   * Handle websocket events and messages
+   * @param {string} pAllowSSPUrl
+   */
+  handleWebsocket: function(pAllowSSPUrl) {
+    var url = '';
+    var apexSessionId = $v('pInstance');
     // socket message event
-    avcSocket.on('message', function(data) {
-      console.log('message data', data);
+    avc.gAvcSocket.on('message', function(data) {
+      // logging & event
+      apex.debug.log('avc.handleWebsocket - message data', data);
+      apex.event.trigger('body', 'avc-websocket-message');
+
+      // Navigate to page
       if (data.type == 'NAV_TO_PAGE' && data.pageId) {
-        apex.navigation.redirect('f?p=' + $v('pFlowId') + ':' + data.pageId + ':' + apexSessionId + ':::::');
+        url = 'f?p=' + $v('pFlowId') + ':' + data.pageId + ':' + apexSessionId + ':::::';
+        avc.getProperUrl(url, pAllowSSPUrl, function(targetUrl) {
+          apex.navigation.redirect(targetUrl);
+        });
+        // Navigate to page and search
       } else if (data.type == 'NAV_TO_PAGE_SEARCH' && data.pageId) {
-        apex.navigation.redirect('f?p=' + $v('pFlowId') + ':' + data.pageId + ':' + apexSessionId + ':::' + data.searchParam + data.searchValue);
+        url = 'f?p=' + $v('pFlowId') + ':' + data.pageId + ':' + apexSessionId + ':::' + data.searchParam + data.searchValue;
+        avc.getProperUrl(url, pAllowSSPUrl, function(targetUrl) {
+          apex.navigation.redirect(targetUrl);
+        });
+        // search in current page
       } else if (data.type == 'CURRENT_PAGE_SEARCH' && data.pages) {
         var pagesArray = data.pages;
         for (var i = 0; i < pagesArray.length; i++) {
@@ -26,15 +58,54 @@ var avc = {
             $('#' + searchField).parents('.a-IRR-search').find('.a-IRR-button--search').click();
           }
         }
+        // party mode for fun
       } else if (data.type == 'PARTY_MODE') {
         avc.partyMode();
       }
     });
     // socket disconnect event
-    avcSocket.on('disconnect', function() {
-      console.log('avcSocket disconnected');
+    avc.gAvcSocket.on('disconnect', function() {
+      // logging & event
+      apex.debug.log('avc.handleWebsocket - websocket disconnected');
+      apex.event.trigger('body', 'avc-websocket-disconnect');
     });
   },
+  /**
+   * Get proper URL, e.g with SSP & checksum or plain URL
+   * @param {string} pUrl
+   * @param {string} pAllowSSPUrl
+   * @param {function} callback
+   */
+  getProperUrl: function(pUrl, pAllowSSPUrl, callback) {
+    // check if allow SSP URL is enabled
+    if (pAllowSSPUrl == 'Y') {
+      // APEX Ajax Call
+      apex.server.plugin(avc.gAjaxIdentifier, {
+        x01: pUrl
+      }, {
+        dataType: 'json',
+        // success
+        success: function(data) {
+          apex.debug.log('avc.getProperUrl - AJAX success', data);
+          if (data.success) {
+            callback(data.url);
+          } else {
+            callback(pUrl);
+          }
+        },
+        // error
+        error: function(xhr, pMessage) {
+          apex.debug.log('avc.getProperUrl - AJAX error', pMessage);
+          callback(pUrl);
+        }
+      });
+    } else {
+      callback(pUrl);
+    }
+  },
+  /**
+   * Party Mode just for fun
+   */
   partyMode: function() {
     (function() {
       function addStyleSheet() {
@@ -188,5 +259,32 @@ var avc = {
         }
       }
     })();
+  },
+  /**
+   * Plugin handler funtion called from PL/SQL DA
+   */
+  pluginHandler: function() {
+    // plugin attributes
+    var daThis = this;
+    var ajaxIdentifier = avc.gAjaxIdentifier = daThis.action.ajaxIdentifier;
+    var baseUrl = daThis.action.attribute01;
+    var serverKey = daThis.action.attribute02;
+    var username = daThis.action.attribute03;
+    var userAccessToken = daThis.action.attribute04;
+    var allowSSPUrl = daThis.action.attribute05;
+
+    // logging
+    apex.debug.log('avc.pluginHandler - ajaxIdentifier', ajaxIdentifier);
+    apex.debug.log('avc.pluginHandler - baseUrl', baseUrl);
+    apex.debug.log('avc.pluginHandler - serverKey', serverKey);
+    apex.debug.log('avc.pluginHandler - username', username);
+    apex.debug.log('avc.pluginHandler - userAccessToken', userAccessToken);
+    apex.debug.log('avc.pluginHandler - allowSSPUrl', allowSSPUrl);
+
+    // connect websocket
+    avc.connectWebsocket(baseUrl, serverKey, username, userAccessToken);
+
+    // handle websocket events and messages
+    avc.handleWebsocket(allowSSPUrl);
   }
 };
