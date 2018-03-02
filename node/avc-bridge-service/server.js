@@ -42,6 +42,10 @@ var srvHelper = {
         restapi.getJSFile('/html/js/error.js', res);
       } else if (pPath == '/css/style.css') {
         restapi.getCSSFile('/html/css/style.css', res);
+      } else if (pPath == '/img/login.svg') {
+        restapi.getSVGFile('/html/img/login.svg', res);
+      } else if (pPath == '/img/error.svg') {
+        restapi.getSVGFile('/html/img/error.svg', res);
       } else {
         restapi.throwHttpError(404, 'Not Found', res);
       }

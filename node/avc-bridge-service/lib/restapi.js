@@ -157,6 +157,7 @@ module.exports = {
   },
   /**
    * Response JS file
+   * @param {string} pFilePath
    * @param {object} res
    */
   getJSFile: function(pFilePath, res) {
@@ -176,6 +177,7 @@ module.exports = {
   },
   /**
    * Response CSS file
+   * @param {string} pFilePath
    * @param {object} res
    */
   getCSSFile: function(pFilePath, res) {
@@ -194,7 +196,28 @@ module.exports = {
     });
   },
   /**
+   * Response SVG file
+   * @param {string} pFilePath
+   * @param {object} res
+   */
+  getSVGFile: function(pFilePath, res) {
+    fs.readFile(appRootFolder + pFilePath, function(err, content) {
+      // HTTP 404 when error
+      if (err) {
+        module.exports.throwHttpError(404, 'Not Found', res);
+        // write index.html
+      } else {
+        res.writeHead(200, {
+          "Content-Type": "image/svg+xml"
+        });
+        res.write(content);
+        res.end();
+      }
+    });
+  },
+  /**
    * Authenticate User with Oracle DB Function
+   * @param {object} req
    * @param {object} res
    */
   authenticateUser: function(req, res) {
