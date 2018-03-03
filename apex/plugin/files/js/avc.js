@@ -27,8 +27,9 @@ var avc = {
   /**
    * Handle websocket events and messages
    * @param {string} pAllowSSPUrl
+   * @param {string} pEnableDefaultActions
    */
-  handleWebsocket: function(pAllowSSPUrl) {
+  handleWebsocket: function(pAllowSSPUrl, pEnableDefaultActions) {
     var url = '';
     var apexSessionId = $v('pInstance');
     // socket message event
@@ -39,33 +40,51 @@ var avc = {
 
       // Navigate to page
       if (data.type == 'NAV_TO_PAGE' && data.pageId) {
+        // event
         apex.event.trigger('body', 'avc-websocket-message-nav_to_page', data);
-        url = 'f?p=' + $v('pFlowId') + ':' + data.pageId + ':' + apexSessionId + ':::::';
-        avc.getProperUrl(url, pAllowSSPUrl, function(targetUrl) {
-          apex.navigation.redirect(targetUrl);
-        });
+        // default action
+        if (pEnableDefaultActions == 'Y') {
+          url = 'f?p=' + $v('pFlowId') + ':' + data.pageId + ':' + apexSessionId + ':::::';
+          avc.getProperUrl(url, pAllowSSPUrl, function(targetUrl) {
+            apex.navigation.redirect(targetUrl);
+          });
+        }
         // Navigate to page and search
       } else if (data.type == 'NAV_TO_PAGE_SEARCH' && data.pageId) {
+        // event
         apex.event.trigger('body', 'avc-websocket-message-nav_to_page_search', data);
-        url = 'f?p=' + $v('pFlowId') + ':' + data.pageId + ':' + apexSessionId + ':::' + data.searchParam + data.searchValue;
-        avc.getProperUrl(url, pAllowSSPUrl, function(targetUrl) {
-          apex.navigation.redirect(targetUrl);
-        });
+        // default action
+        if (pEnableDefaultActions == 'Y') {
+          url = 'f?p=' + $v('pFlowId') + ':' + data.pageId + ':' + apexSessionId + ':::' + data.searchParam + data.searchValue;
+          avc.getProperUrl(url, pAllowSSPUrl, function(targetUrl) {
+            apex.navigation.redirect(targetUrl);
+          });
+        }
         // search in current page
       } else if (data.type == 'CURRENT_PAGE_SEARCH' && data.pages) {
+        // event
         apex.event.trigger('body', 'avc-websocket-message-current_page_search', data);
-        var pagesArray = data.pages;
-        for (var i = 0; i < pagesArray.length; i++) {
-          if (pagesArray[i].pageId == parseInt($v('pFlowStepId'))) {
-            var searchField = pagesArray[i].searchField;
-            $('#' + searchField).val(data.searchValue);
-            $('#' + searchField).parents('.a-IRR-search').find('.a-IRR-button--search').click();
+        // default action
+        if (pEnableDefaultActions == 'Y') {
+          var pagesArray = data.pages;
+          for (var i = 0; i < pagesArray.length; i++) {
+            if (pagesArray[i].pageId == parseInt($v('pFlowStepId'))) {
+              var searchField = pagesArray[i].searchField;
+              $('#' + searchField).val(data.searchValue);
+              if ($('#' + searchField).hasClass('a-IRR-search-field')) {
+                $('#' + searchField).parents('.a-IRR-search').find('.a-IRR-button--search').click();
+              }
+            }
           }
         }
         // party mode for fun
       } else if (data.type == 'PARTY_MODE') {
+        // event
         apex.event.trigger('body', 'avc-websocket-message-party_mode', data);
-        avc.partyMode();
+        // default action
+        if (pEnableDefaultActions == 'Y') {
+          avc.partyMode();
+        }
       }
     });
     // socket disconnect event
@@ -277,8 +296,9 @@ var avc = {
     var serverKey = daThis.action.attribute02;
     var username = daThis.action.attribute03;
     var userAccessToken = daThis.action.attribute04;
-    var allowSSPUrl = daThis.action.attribute05;
-    var plgFilePrefix = avc.gPlgFilePrefix = daThis.action.attribute06;
+    var enableDefaultActions = daThis.action.attribute05;
+    var allowSSPUrl = daThis.action.attribute06;
+    var plgFilePrefix = avc.gPlgFilePrefix = daThis.action.attribute07;
 
     // logging
     apex.debug.log('avc.pluginHandler - ajaxIdentifier', ajaxIdentifier);
@@ -286,6 +306,7 @@ var avc = {
     apex.debug.log('avc.pluginHandler - serverKey', serverKey);
     apex.debug.log('avc.pluginHandler - username', username);
     apex.debug.log('avc.pluginHandler - userAccessToken', userAccessToken);
+    apex.debug.log('avc.pluginHandler - enableDefaultActions', enableDefaultActions);
     apex.debug.log('avc.pluginHandler - allowSSPUrl', allowSSPUrl);
     apex.debug.log('avc.pluginHandler - plgFilePrefix', plgFilePrefix);
 
@@ -293,6 +314,6 @@ var avc = {
     avc.connectWebsocket(baseUrl, serverKey, username, userAccessToken);
 
     // handle websocket events and messages
-    avc.handleWebsocket(allowSSPUrl);
+    avc.handleWebsocket(allowSSPUrl, enableDefaultActions);
   }
 };
