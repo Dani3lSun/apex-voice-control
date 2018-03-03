@@ -35,22 +35,25 @@ var avc = {
     avc.gAvcSocket.on('message', function(data) {
       // logging & event
       apex.debug.log('avc.handleWebsocket - message data', data);
-      apex.event.trigger('body', 'avc-websocket-message');
+      apex.event.trigger('body', 'avc-websocket-message', data);
 
       // Navigate to page
       if (data.type == 'NAV_TO_PAGE' && data.pageId) {
+        apex.event.trigger('body', 'avc-websocket-message-nav_to_page', data);
         url = 'f?p=' + $v('pFlowId') + ':' + data.pageId + ':' + apexSessionId + ':::::';
         avc.getProperUrl(url, pAllowSSPUrl, function(targetUrl) {
           apex.navigation.redirect(targetUrl);
         });
         // Navigate to page and search
       } else if (data.type == 'NAV_TO_PAGE_SEARCH' && data.pageId) {
+        apex.event.trigger('body', 'avc-websocket-message-nav_to_page_search', data);
         url = 'f?p=' + $v('pFlowId') + ':' + data.pageId + ':' + apexSessionId + ':::' + data.searchParam + data.searchValue;
         avc.getProperUrl(url, pAllowSSPUrl, function(targetUrl) {
           apex.navigation.redirect(targetUrl);
         });
         // search in current page
       } else if (data.type == 'CURRENT_PAGE_SEARCH' && data.pages) {
+        apex.event.trigger('body', 'avc-websocket-message-current_page_search', data);
         var pagesArray = data.pages;
         for (var i = 0; i < pagesArray.length; i++) {
           if (pagesArray[i].pageId == parseInt($v('pFlowStepId'))) {
@@ -61,6 +64,7 @@ var avc = {
         }
         // party mode for fun
       } else if (data.type == 'PARTY_MODE') {
+        apex.event.trigger('body', 'avc-websocket-message-party_mode', data);
         avc.partyMode();
       }
     });
