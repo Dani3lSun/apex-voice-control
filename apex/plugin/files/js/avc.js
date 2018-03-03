@@ -4,6 +4,7 @@ var avc = {
    */
   gAvcSocket: null,
   gAjaxIdentifier: null,
+  gPlgFilePrefix: null,
   /**
    * Connect to websocket of AVC-Bridge-Service
    * @param {string} pBaseUrl
@@ -105,6 +106,7 @@ var avc = {
   },
   /**
    * Party Mode just for fun
+   * Taken from: https://codepen.io/taylor8294/pen/HzEkg
    */
   partyMode: function() {
     (function() {
@@ -223,12 +225,12 @@ var avc = {
       var minWidth = 30;
       var maxHeight = 350;
       var maxWidth = 350;
-      var mp3Src = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3";
+      var mp3Src = avc.gPlgFilePrefix + "misc/harlem-shake.mp3";
       var shakeMeClass = "mw-harlem_shake_me";
       var imFirstClass = "im_first";
       var varClasses = ["im_drunk", "im_baked", "im_trippin", "im_blown"];
       var flashClass = "mw-strobe_light";
-      var styleSrc = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css";
+      var styleSrc = avc.gPlgFilePrefix + "css/harlem-shake-style.min.css";
       var markerClass = "mw_added_css";
       var windowHeight = getWindowHeight();
       var yOffset = getPageYOffset();
@@ -244,10 +246,10 @@ var avc = {
         }
       }
       if (startElement === null) {
-        console.warn("Could not find a node of the right size. Please try a different page.");
+        apex.debug.log("Could not find a node of the right size. Please try a different page.");
         return;
       } else {
-        console.log("Found start element: ", A, " with width " + getSize(A).width + ", height " + getSize(A).height + ", and a total Y offset of " + heightFromTop(A));
+        apex.debug.log("Found start element: ", A, " with width " + getSize(A).width + ", height " + getSize(A).height + ", and a total Y offset of " + heightFromTop(A));
       }
       addStyleSheet();
       main();
@@ -272,6 +274,7 @@ var avc = {
     var username = daThis.action.attribute03;
     var userAccessToken = daThis.action.attribute04;
     var allowSSPUrl = daThis.action.attribute05;
+    var plgFilePrefix = avc.gPlgFilePrefix = daThis.action.attribute06;
 
     // logging
     apex.debug.log('avc.pluginHandler - ajaxIdentifier', ajaxIdentifier);
@@ -280,6 +283,7 @@ var avc = {
     apex.debug.log('avc.pluginHandler - username', username);
     apex.debug.log('avc.pluginHandler - userAccessToken', userAccessToken);
     apex.debug.log('avc.pluginHandler - allowSSPUrl', allowSSPUrl);
+    apex.debug.log('avc.pluginHandler - plgFilePrefix', plgFilePrefix);
 
     // connect websocket
     avc.connectWebsocket(baseUrl, serverKey, username, userAccessToken);
