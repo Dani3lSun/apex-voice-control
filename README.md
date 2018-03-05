@@ -45,8 +45,8 @@ Insum Solutions is providing a good overview of often used [definitions and term
 ### User Authentication
 
 1. User installs APEX Voice Control (AVC) Skill via Amazon Alexa companion app
-2. User get redirected to login page (provided by AVC-Bridge-Service)
-3. User successfully get logged in providing the same credentials as in the APEX app
+2. User gets redirected to login page (provided by AVC-Bridge-Service)
+3. User successfully get logged in by providing the same credentials as in the APEX app
 4. AVC-Bridge-Service will generate & save an access token
 5. AVC-Bridge-Service will return that access token to the Amazon Alexa companion app
 
