@@ -9,16 +9,27 @@
 
 - [APEX Voice Control](#apex-voice-control)
   - [Changelog](#changelog)
+  - [Features](#features)
+  - [Infrastructure Diagram](#infrastructure-diagram)
   - [License](#license)
-
-
-#### Infrastructure Diagram
-![](/docs/img/infrastructure-diagram.png)
 
 
 ## Changelog
 
 #### [1.0.0 - Initial Release](https://github.com/Dani3lSun/apex-voice-control/releases/tag/v1.0.0)
+
+
+## Features
+
+- Navigate to specified APEX pages
+- Navigate to specified APEX pages and execute searches via URL params
+- Search on current page
+- User authentication & assignment via Amazon Alexa companion app
+- Multilingual structure, english and german are shipped
+
+
+## Infrastructure Diagram
+![](/docs/img/infrastructure-diagram.png)
 
 
 ## Further Documentation
