@@ -5,6 +5,7 @@ var avc = {
   gAvcSocket: null,
   gAjaxIdentifier: null,
   gPlgFilePrefix: null,
+  gSpinner: null,
   /**
    * Connect to websocket of AVC-Bridge-Service
    * @param {string} pBaseUrl
@@ -44,6 +45,7 @@ var avc = {
         apex.event.trigger('body', 'avc-websocket-message-nav_to_page', data);
         // default action
         if (pEnableDefaultActions == 'Y') {
+          avc.gSpinner = apex.util.showSpinner($('body'));
           url = 'f?p=' + $v('pFlowId') + ':' + data.pageId + ':' + apexSessionId + ':::::';
           avc.getProperUrl(url, pAllowSSPUrl, function(targetUrl) {
             apex.navigation.redirect(targetUrl);
@@ -55,6 +57,7 @@ var avc = {
         apex.event.trigger('body', 'avc-websocket-message-nav_to_page_search', data);
         // default action
         if (pEnableDefaultActions == 'Y') {
+          avc.gSpinner = apex.util.showSpinner($('body'));
           url = 'f?p=' + $v('pFlowId') + ':' + data.pageId + ':' + apexSessionId + ':::' + data.searchParam + data.searchValue;
           avc.getProperUrl(url, pAllowSSPUrl, function(targetUrl) {
             apex.navigation.redirect(targetUrl);
@@ -309,6 +312,11 @@ var avc = {
     apex.debug.log('avc.pluginHandler - enableDefaultActions', enableDefaultActions);
     apex.debug.log('avc.pluginHandler - allowSSPUrl', allowSSPUrl);
     apex.debug.log('avc.pluginHandler - plgFilePrefix', plgFilePrefix);
+
+    // remove Spinner
+    if (avc.gSpinner) {
+      avc.gSpinner.remove();
+    }
 
     // connect websocket
     avc.connectWebsocket(baseUrl, serverKey, username, userAccessToken);
