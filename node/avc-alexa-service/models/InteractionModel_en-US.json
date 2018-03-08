@@ -1,126 +1,139 @@
 {
-  "languageModel": {
-    "types": [{
-      "name": "LIST_OF_PAGES",
-      "values": [{
-          "id": null,
-          "name": {
-            "value": "employee",
-            "synonyms": []
-          }
-        },
-        {
-          "id": null,
-          "name": {
-            "value": "employees",
-            "synonyms": []
-          }
-        },
-        {
-          "id": null,
-          "name": {
-            "value": "customer",
-            "synonyms": []
-          }
-        },
-        {
-          "id": null,
-          "name": {
-            "value": "customers",
-            "synonyms": []
-          }
-        },
-        {
-          "id": null,
-          "name": {
-            "value": "product",
-            "synonyms": []
-          }
-        },
-        {
-          "id": null,
-          "name": {
-            "value": "products",
-            "synonyms": []
-          }
-        }
-      ]
-    }],
-    "intents": [{
-        "name": "AMAZON.CancelIntent",
-        "samples": []
-      },
-      {
-        "name": "AMAZON.HelpIntent",
-        "samples": []
-      },
-      {
-        "name": "AMAZON.RepeatIntent",
-        "samples": []
-      },
-      {
-        "name": "AMAZON.StopIntent",
-        "samples": []
-      },
-      {
-        "name": "NavigatePageIntent",
-        "samples": [
-          "open page {Page}",
-          "open {Page} page",
-          "go to page {Page}",
-          "go to {Page} page",
-          "navigate to page {Page}",
-          "navigate to {Page} page"
+    "languageModel": {
+        "invocationName": "apex",
+        "intents": [
+            {
+                "name": "AMAZON.CancelIntent",
+                "slots": [],
+                "samples": []
+            },
+            {
+                "name": "AMAZON.HelpIntent",
+                "slots": [],
+                "samples": []
+            },
+            {
+                "name": "AMAZON.RepeatIntent",
+                "slots": [],
+                "samples": []
+            },
+            {
+                "name": "AMAZON.StopIntent",
+                "slots": [],
+                "samples": []
+            },
+            {
+                "name": "NavigatePageIntent",
+                "slots": [
+                    {
+                        "name": "Page",
+                        "type": "LIST_OF_PAGES"
+                    }
+                ],
+                "samples": [
+                    "open page {Page}",
+                    "open {Page} page",
+                    "go to page {Page}",
+                    "go to {Page} page",
+                    "navigate to page {Page}",
+                    "navigate to {Page} page"
+                ]
+            },
+            {
+                "name": "NavigatePageSearchIntent",
+                "slots": [
+                    {
+                        "name": "Page",
+                        "type": "LIST_OF_PAGES"
+                    },
+                    {
+                        "name": "Search",
+                        "type": "AMAZON.US_FIRST_NAME"
+                    }
+                ],
+                "samples": [
+                    "open page {Page} and search for {Search}",
+                    "open {Page} page and search for {Search}",
+                    "go to page {Page} and search for {Search}",
+                    "go to {Page} page and search {Search}",
+                    "navigate to page {Page} and search for {Search}",
+                    "navigate to {Page} page and search {Search}",
+                    "search for {Page} {Search}"
+                ]
+            },
+            {
+                "name": "PartyModeIntent",
+                "slots": [],
+                "samples": [
+                    "party hard",
+                    "let the party begin",
+                    "get the party started"
+                ]
+            },
+            {
+                "name": "SearchCurrentPageIntent",
+                "slots": [
+                    {
+                        "name": "Search",
+                        "type": "AMAZON.US_FIRST_NAME"
+                    }
+                ],
+                "samples": [
+                    "search on current page for {Search}",
+                    "search on this page for {Search}",
+                    "search for {Search} on current page",
+                    "search for {Search} on this page"
+                ]
+            }
         ],
-        "slots": [{
-          "name": "Page",
-          "type": "LIST_OF_PAGES"
-        }]
-      },
-      {
-        "name": "NavigatePageSearchIntent",
-        "samples": [
-          "open page {Page} and search for {Search}",
-          "open {Page} page and search for {Search}",
-          "go to page {Page} and search for {Search}",
-          "go to {Page} page and search {Search}",
-          "navigate to page {Page} and search for {Search}",
-          "navigate to {Page} page and search {Search}",
-          "search for {Page} {Search}"
-        ],
-        "slots": [{
-            "name": "Page",
-            "type": "LIST_OF_PAGES"
-          },
-          {
-            "name": "Search",
-            "type": "AMAZON.US_FIRST_NAME"
-          }
+        "types": [
+            {
+                "name": "LIST_OF_PAGES",
+                "values": [
+                    {
+                        "id": "",
+                        "name": {
+                            "value": "employee",
+                            "synonyms": []
+                        }
+                    },
+                    {
+                        "id": "",
+                        "name": {
+                            "value": "employees",
+                            "synonyms": []
+                        }
+                    },
+                    {
+                        "id": "",
+                        "name": {
+                            "value": "customer",
+                            "synonyms": []
+                        }
+                    },
+                    {
+                        "id": "",
+                        "name": {
+                            "value": "customers",
+                            "synonyms": []
+                        }
+                    },
+                    {
+                        "id": "",
+                        "name": {
+                            "value": "product",
+                            "synonyms": []
+                        }
+                    },
+                    {
+                        "id": "",
+                        "name": {
+                            "value": "products",
+                            "synonyms": []
+                        }
+                    }
+                ]
+            }
         ]
-      },
-      {
-        "name": "SearchCurrentPageIntent",
-        "samples": [
-          "search on current page for {Search}",
-          "search on this page for {Search}",
-          "search for {Search} on current page",
-          "search for {Search} on this page"
-        ],
-        "slots": [{
-          "name": "Search",
-          "type": "AMAZON.US_FIRST_NAME"
-        }]
-      },
-      {
-        "name": "PartyModeIntent",
-        "samples": [
-          "party hard",
-          "let the party begin",
-          "get the party started"
-        ],
-        "slots": []
-      }
-    ],
-    "invocationName": "apex"
-  }
+    }
 }
