@@ -25,7 +25,7 @@
   "homepage": "https://github.com/Dani3lSun/apex-voice-control#readme",
   "dependencies": {
     "alexa-sdk": "^1.0.25",
-    "aws-sdk": "^2.205.0",
+    "aws-sdk": "^2.206.0",
     "request": "^2.83.0"
   }
 }
