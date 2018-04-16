@@ -4,24 +4,24 @@
       "en": ["employee", "employees"],
       "de": ["mitarbeiter"]
     },
-    "searchParam": "RP,CIR:IR[CUSTOMER]C_ENAME:",
-    "searchField": "EMPLOYEE_search_field",
-    "pageId": 1
+    "searchParam": "RP,CIR:IR[EMP_IR]C_FIRST_NAME:",
+    "searchField": "EMP_IR_search_field",
+    "pageId": 3
   }, {
     "pageName": {
       "en": ["customer", "customers"],
       "de": ["kunde", "kunden"]
     },
-    "searchParam": "RP,CIR:IR[CUSTOMER]C_CUSTOMER_NAME:",
-    "searchField": "CUSTOMER_search_field",
+    "searchParam": "RP,CIR:IR[CUSTOMER_IR]C_CUSTOMER_NAME:",
+    "searchField": "CUSTOMER_IR_search_field",
     "pageId": 2
   }, {
     "pageName": {
       "en": ["product", "products"],
       "de": ["produkt", "produkte"]
     },
-    "searchParam": "RP,CIR:IR[PRODUCT]_ROWFILTER:",
-    "searchField": "PRODUCT_search_field",
-    "pageId": 3
+    "searchParam": "RP,CIR:IR[PRODUCT_IR]_ROWFILTER:",
+    "searchField": "PRODUCT_IR_search_field",
+    "pageId": 4
   }]
 }

@@ -31,7 +31,7 @@
     "lowdb": "^1.0.0",
     "oracledb": "^1.13.1",
     "querystring": "^0.2.0",
-    "socket.io": "^2.0.4",
+    "socket.io": "^2.1.0",
     "url": "^0.11.0"
   }
 }

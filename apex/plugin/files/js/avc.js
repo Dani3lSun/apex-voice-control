@@ -1,3 +1,7 @@
+/*+
+ * AVC APEX plugin javascript
+ * Version: 1.0.0
+ */
 var avc = {
   /**
    * Global Variables
