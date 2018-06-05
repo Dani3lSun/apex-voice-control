@@ -27,11 +27,11 @@
     "fs": "0.0.1-security",
     "http": "0.0.0",
     "https": "^1.0.0",
-    "log4js": "^2.5.3",
+    "log4js": "^2.8.0",
     "lowdb": "^1.0.0",
     "oracledb": "^1.13.1",
     "querystring": "^0.2.0",
-    "socket.io": "^2.1.0",
+    "socket.io": "^2.1.1",
     "url": "^0.11.0"
   }
 }
